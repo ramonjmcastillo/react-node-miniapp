@@ -89,11 +89,21 @@
   margin-top: 5px;
 }
 
+.rmdb-movie-top {
+  display: flex;
+  justify-content: space-between;
+}
+
 .fa-film {
   position: absolute;
   bottom: 40px;
   right: 40px;
   color: #fff;
+}
+
+.open-modal-btn {
+  margin-right: 20px;
+  padding: 20px;
 }
 
 meter::-webkit-meter-bar {

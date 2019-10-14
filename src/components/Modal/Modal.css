@@ -13,6 +13,9 @@
   line-height: 40px;
   padding: 5px 20px;
   text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .modal-header h3 {

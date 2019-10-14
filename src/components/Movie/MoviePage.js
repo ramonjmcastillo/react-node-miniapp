@@ -18,7 +18,8 @@ class MoviePage extends React.Component {
     convertedData: [],
     actors: [],
     isLoading: false,
-    youtubeUrl: null
+    youtubeUrl: null,
+    movieIndex: null
   };
 
   async componentDidMount() {
@@ -68,7 +69,8 @@ class MoviePage extends React.Component {
       convertedData: tmdbResponse,
       actors: actors,
       isLoading: false,
-      youtubeUrl
+      youtubeUrl,
+      movieIndex
     });
   }
 
@@ -97,6 +99,7 @@ class MoviePage extends React.Component {
               poster_path={this.state.poster_path}
               movieData={this.state.movie}
               youtubeUrl={this.state.youtubeUrl}
+              movieIndex={this.state.movieIndex}
             />
             <MovieInfoBar
               movieData={this.state.movie}

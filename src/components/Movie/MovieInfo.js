@@ -4,11 +4,19 @@ import MovieThumb from "../MovieThumb/MovieThumb";
 import "./MovieInfo.css";
 import NoImage from "../../assets/images/no_image.jpg";
 import Modal from "../Modal/Modal";
+import axios from "axios";
+import { useAuth0 } from "../../auth0/react-auth0-wrapper";
+import { withRouter } from "react-router-dom";
 
 const MovieInfo = props => {
+  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { getTokenSilently } = useAuth0();
+
+  const [movieIndex] = useState(props.movieIndex);
+
   const [isShowing, setisShowing] = useState(false);
 
-  const [screenPosition, setScreenPosition] = useState(window.pageYOffset);
+  // const [screenPosition, setScreenPosition] = useState(window.pageYOffset);
 
   const openModal = () => {
     setisShowing(true);
@@ -17,7 +25,20 @@ const MovieInfo = props => {
   const closeModal = () => {
     setisShowing(false);
   };
-  console.log("inside movieinfo", props);
+
+  const deleteMovie = async () => {
+    const token = await getTokenSilently();
+    console.log(token);
+    await axios({
+      method: "delete",
+      url: `http://localhost:9000/delete/${movieIndex}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log("inside delete movie got here");
+    props.history.push("/");
+  };
   return (
     <div>
       <div
@@ -36,7 +57,12 @@ const MovieInfo = props => {
             />
           </div>
           <div className="rmdb-movie-info-text">
-            <h1> {props.movieData.title}</h1>
+            <div className="rmdb-movie-top">
+              <h1> {props.movieData.title}</h1>
+              {isAuthenticated && (
+                <button onClick={deleteMovie}> Delete </button>
+              )}
+            </div>
             <p> {props.movieData.plot} </p>
             <h3 className="rmdb-imdb-rating">
               IMDB RATING <span> {props.movieData.imdb.rating} </span>
@@ -60,23 +86,20 @@ const MovieInfo = props => {
               <p className="rmdb-director-item"> {props.movieData.director} </p>
             </div>
           </div>
+          {isShowing ? (
+            <div onClick={closeModal} className="back-drop"></div>
+          ) : null}
 
-          <div>
-            {isShowing ? (
-              <div onClick={closeModal} className="back-drop"></div>
-            ) : null}
+          <button className="open-modal-btn" onClick={openModal}>
+            Watch Trailer
+          </button>
 
-            <button className="open-modal-btn" onClick={openModal}>
-              Open Modal
-            </button>
-
-            <Modal
-              youtubeUrl={props.youtubeUrl}
-              className="modal"
-              show={isShowing}
-              close={closeModal}
-            ></Modal>
-          </div>
+          <Modal
+            youtubeUrl={props.youtubeUrl}
+            className="modal"
+            show={isShowing}
+            close={closeModal}
+          ></Modal>
           <FontAwesome className="fa-film" name="film" size="5x" />
         </div>
       </div>
@@ -84,4 +107,4 @@ const MovieInfo = props => {
   );
 };
 
-export default MovieInfo;
+export default withRouter(MovieInfo);

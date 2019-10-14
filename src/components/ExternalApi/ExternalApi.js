@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAuth0 } from "../../auth0/react-auth0-wrapper";
-import axios from "axios";
 
 const ExternalApi = () => {
   const [showResult, setShowResult] = useState(false);
@@ -10,8 +9,8 @@ const ExternalApi = () => {
   const callApi = async () => {
     try {
       const token = await getTokenSilently();
-      console.log("token", token);
 
+      console.log("this is my token", token);
       const response = await fetch("http://localhost:9000/movieList", {
         headers: {
           Authorization: `Bearer ${token}`
